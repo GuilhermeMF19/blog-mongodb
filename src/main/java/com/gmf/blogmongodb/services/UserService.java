@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.gmf.blogmongodb.domain.User;
@@ -27,5 +28,13 @@ public class UserService {
 	
 	public User insert(User obj) {
 		return repo.insert(obj);
+	}
+	
+	public void delete(String id) {
+		try {
+			repo.deleteById(id);			
+		} catch (EmptyResultDataAccessException e) {
+			throw new ObjectNotFoundException(id);
+		}
 	}
 }
