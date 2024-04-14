@@ -18,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.gmf.blogmongodb.domain.User;
 import com.gmf.blogmongodb.dto.UserDTO;
 import com.gmf.blogmongodb.services.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping(value = "/users")
@@ -50,6 +52,14 @@ public class UserResource {
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable String id) {
+		User obj = objDto.fromDTO();
+		obj.setId(id);
+		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 
