@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.gmf.blogmongodb.domain.Post;
+import com.gmf.blogmongodb.resources.util.URL;
 import com.gmf.blogmongodb.services.PostService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -55,5 +57,12 @@ public class PostResource {
 	public ResponseEntity<Void> update(@RequestBody Post post, @PathVariable String id) {
 		service.update(post);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping(value = "/titlesearch")
+	public ResponseEntity<List<Post>> findByTitle(@RequestParam(value="text", defaultValue = "") String text) {
+		text = URL.decodeParam(text);
+		List<Post> list = service.findByTitle(text);
+		return ResponseEntity.ok().body(list);
 	}
 }
